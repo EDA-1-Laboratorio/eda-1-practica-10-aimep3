@@ -30,11 +30,30 @@ def cambio_greedy(monto: int, monedas: list) -> tuple | None:
         cantidad = restante // moneda  (cuántas caben)
         restante = restante % moneda   (lo que sobra)
     """
-    # TODO: 1. Ordena las monedas de mayor a menor.
-    # TODO: 2. Para cada denominación, toma tantas monedas como quepan.
-    # TODO: 3. Si el residuo final es 0, retorna (lista_de_monedas_usadas, total).
-    # TODO: 4. Si queda residuo, retorna None.
-    pass
+    # 1. Ordena las monedas de mayor a menor
+    monedas_ord = sorted(monedas, reverse=True)
+    
+    if monto < 0:
+        return None
+    
+    restante = monto
+    usadas = []
+    
+    # 2. Para cada denominación, toma tantas monedas como quepan
+    for moneda in monedas_ord:
+        if restante == 0:
+            break
+        if moneda <= restante:
+            cantidad = restante // moneda
+            usadas.extend([moneda] * cantidad)
+            restante = restante % moneda
+    
+    # 3. Si el residuo final es 0, retorna (lista_de_monedas_usadas, total)
+    if restante == 0:
+        return (usadas, len(usadas))
+    
+    # 4. Si queda residuo, retorna None
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -56,11 +75,39 @@ def cambio_optimo_dp(monto: int, monedas: list) -> tuple | None:
         Transición: dp[i] = min(dp[i], dp[i - m] + 1) para cada moneda m <= i.
         Guarda padre[i] = m que produjo dp[i] para reconstruir la solución.
     """
-    # TODO: crea la tabla dp y la tabla padre con longitud monto + 1.
-    # TODO: llena la tabla recorriendo cada monto parcial de 1 a monto.
-    # TODO: si dp[monto] es inf, retorna None.
-    # TODO: reconstruye la lista de monedas usando padre[].
-    pass
+    if monto < 0:
+        return None
+    
+    if monto == 0:
+        return ([], 0)
+    
+    # crea la tabla dp y la tabla padre con longitud monto + 1
+    dp = [float('inf')] * (monto + 1)
+    padre = [-1] * (monto + 1)
+    
+    # Inicialización
+    dp[0] = 0
+    
+    # llena la tabla recorriendo cada monto parcial de 1 a monto
+    for i in range(1, monto + 1):
+        for moneda in monedas:
+            if moneda <= i and dp[i - moneda] + 1 < dp[i]:
+                dp[i] = dp[i - moneda] + 1
+                padre[i] = moneda
+    
+    # si dp[monto] es inf, retorna None
+    if dp[monto] == float('inf'):
+        return None
+    
+    # reconstruye la lista de monedas usando padre[]
+    usadas = []
+    actual = monto
+    while actual > 0:
+        moneda = padre[actual]
+        usadas.append(moneda)
+        actual -= moneda
+    
+    return (usadas, len(usadas))
 
 
 # ---------------------------------------------------------------------------
@@ -77,9 +124,27 @@ def comparar_estrategias(monto_max: int, monedas: list) -> dict:
         'montos_greedy_suboptimo' : lista de (monto, total_greedy, total_dp)
                                     donde greedy usa más monedas que DP.
     """
-    # TODO: itera los montos, llama a cambio_greedy y cambio_optimo_dp.
-    # TODO: clasifica cada caso y acumula en las listas correspondientes.
-    pass
+    # itera los montos, llama a cambio_greedy y cambio_optimo_dp
+    montos_falla = []
+    montos_suboptimo = []
+    
+    for monto in range(1, monto_max + 1):
+        greedy_result = cambio_greedy(monto, monedas)
+        dp_result = cambio_optimo_dp(monto, monedas)
+        
+        # clasifica cada caso y acumula en las listas correspondientes
+        if greedy_result is None and dp_result is not None:
+            montos_falla.append(monto)
+        elif greedy_result is not None and dp_result is not None:
+            _, total_greedy = greedy_result
+            _, total_dp = dp_result
+            if total_greedy > total_dp:
+                montos_suboptimo.append((monto, total_greedy, total_dp))
+    
+    return {
+        'montos_greedy_falla': montos_falla,
+        'montos_greedy_suboptimo': montos_suboptimo
+    }
 
 
 # ---------------------------------------------------------------------------
