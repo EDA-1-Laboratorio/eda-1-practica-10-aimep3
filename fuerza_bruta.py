@@ -32,7 +32,8 @@ def generar_candidatos(alfabeto: str, longitud: int):
         itertools.product(alfabeto, repeat=longitud) produce tuplas de caracteres.
         "".join(tupla) convierte una tupla en cadena.
     """
-   for partes in intertools.product(alfabeto, repeat=longitud):yield"".join(partes)
+   for partes in intertools.product(alfabeto, repeat=longitud):
+       yield"".join(partes)
     
 
 
