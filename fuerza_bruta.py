@@ -33,7 +33,7 @@ def generar_candidatos(alfabeto: str, longitud: int):
         "".join(tupla) convierte una tupla en cadena.
     """
    for partes in intertools.product(alfabeto, repeat=longitud):
-       yield"".join(partes)
+       yield "".join(partes)
     
 
 
