@@ -168,6 +168,7 @@ if __name__ == "__main__":
     print("\n=== Análisis completo montos 1-60, sistema [1,3,4] ===")
     resultado = comparar_estrategias(60, no_canonicas)
     if resultado is not None:
+
         sub = resultado.get("montos_greedy_suboptimo", [])
         fal = resultado.get("montos_greedy_falla", [])
         print(f"  Casos subóptimos : {len(sub)}")
@@ -176,3 +177,32 @@ if __name__ == "__main__":
             print(f"  Primeros 5 subóptimos: {sub[:5]}")
     else:
         print("  comparar_estrategias aún no implementada")
+
+# ---------------------------------------------------------------------------
+# Problema D – (discusión técnica)
+# ---------------------------------------------------------------------------
+
+Por qué greedy funciona bien en algunos sistemas monetarios y falla en otros.
+    Cuando el sistema de monedas no es canónico, no encajan; 
+entonces solo toma la de mayor valor dejando algo más complicado, pero cuando es un sistema canónico, 
+los valores se complementan perfectamente a lo que busca o quiere Greedy.
+Qué propiedad estructural del sistema influye en la optimalidad.
+    La propiedad que influye es que Greendy sigue una estructura de orde, y relación de proporción. 
+Si es canonico respueta seguramente correcta, si no es cánonica presentara problemas.
+
+# ---------------------------------------------------------------------------
+# Problema E – Análisis de complejidad: algoritmo ávido
+# ---------------------------------------------------------------------------
+ ¿La razón converge a 2? ¿Qué sugiere eso sobre la complejidad de cambio_optimo_dp?
+Sí, el algoritmo trabajara de manera directamente proporcional al tamaño del monto.
+¿Por qué cambio_greedy tiene complejidad O(1) respecto al monto m?
+    Porque lo importantes es la cantidad de monedas, no el tamaño de ellas. hará el ciclo con cada una de ellas.
+ Verifica en la tabla de E.1: ¿el tiempo de cambio_greedy crece al aumentar m? ¿Y el de cambio_optimo_dp?
+        En cambio_greedy: El tiempo no crece.
+        En cambio_optimo_dp: El tiempo sí crece.
+            
+¿Qué implica "O(1)" sobre la escalabilidad del algoritmo ávido para montos muy grandes?
+Implica escabilidad, no necesita recorrer, sino que calcular aunque sea un monto pequeño o grande.
+¿La mayor velocidad de greedy justifica siempre su uso en lugar de DP? ¿Cuándo no?
+No siempre. Greedy: Cuando el sistema de monedas sea canónico. 
+ DP: Cuando el sistema sea no canónico o desconocido. 
