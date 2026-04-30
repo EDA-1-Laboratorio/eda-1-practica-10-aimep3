@@ -182,7 +182,7 @@ if __name__ == "__main__":
 # Problema D – (discusión técnica)
 # ---------------------------------------------------------------------------
 
-Por qué greedy funciona bien en algunos sistemas monetarios y falla en otros.
+""Por qué greedy funciona bien en algunos sistemas monetarios y falla en otros.
     Cuando el sistema de monedas no es canónico, no encajan; 
 entonces solo toma la de mayor valor dejando algo más complicado, pero cuando es un sistema canónico, 
 los valores se complementan perfectamente a lo que busca o quiere Greedy.
@@ -205,4 +205,4 @@ Sí, el algoritmo trabajara de manera directamente proporcional al tamaño del m
 Implica escabilidad, no necesita recorrer, sino que calcular aunque sea un monto pequeño o grande.
 ¿La mayor velocidad de greedy justifica siempre su uso en lugar de DP? ¿Cuándo no?
 No siempre. Greedy: Cuando el sistema de monedas sea canónico. 
- DP: Cuando el sistema sea no canónico o desconocido. 
+ DP: Cuando el sistema sea no canónico o desconocido. ""
